@@ -1,13 +1,12 @@
 import { Button } from './components/ui/button'
 import './App.css'
-
+import CodeCompiler from './components/compiler/CodeCompiler'
 function App() {
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-2 md:flex-row">
-        <Button variant="secondary">Secondary</Button>
-      </div>
+      <CodeCompiler>
+      </CodeCompiler>
     </>
   )
 }
