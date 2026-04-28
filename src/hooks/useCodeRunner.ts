@@ -1,6 +1,5 @@
 import { executeCode } from "../services/judge0.service";
 import { useState, useCallback } from "react"
-
 export type LineType = "stdout" | "stderr" | "error" | "info"
 
 export interface OutputLine {
@@ -20,19 +19,19 @@ interface RunParams {
 export const JUDGE0_LANG_IDS = {
   javascript: 93,
   typescript: 74,
-  python:     71,
-  csharp:     51,
-  java:       62,
+  python: 71,
+  csharp: 51,
+  java: 62,
 } as const
 
 const STATUS_DESCRIPTIONS: Record<number, string> = {
-  3:  "Accepted",
-  4:  "Wrong Answer",
-  5:  "Time Limit Exceeded",
-  6:  "Compilation Error",
-  7:  "Runtime Error (SIGSEGV)",
-  8:  "Runtime Error (SIGXFSZ)",
-  9:  "Runtime Error (SIGFPE)",
+  3: "Accepted",
+  4: "Wrong Answer",
+  5: "Time Limit Exceeded",
+  6: "Compilation Error",
+  7: "Runtime Error (SIGSEGV)",
+  8: "Runtime Error (SIGXFSZ)",
+  9: "Runtime Error (SIGFPE)",
   10: "Runtime Error (SIGABRT)",
   11: "Runtime Error (NZEC)",
   12: "Runtime Error (Other)",
@@ -47,9 +46,14 @@ let lineId = 0
 // ── Hook ─────────────────────────────────────────────────────────────────────
 
 export function useCodeRunner() {
-  const [lines,    setLines]    = useState<OutputLine[]>([])
-  const [status,   setStatus]   = useState<RunStatus>("idle")
+  const [lines, setLines] = useState<OutputLine[]>([])
+  const [status, setStatus] = useState<RunStatus>("idle")
   const [execTime, setExecTime] = useState<number | null>(null)
+  const [alert, setAlert] = useState<{
+    title: string
+    description: string
+    variant: "default" | "destructive"
+  } | null>(null)
 
   const clear = useCallback(() => {
     setLines([])
@@ -68,29 +72,12 @@ export function useCodeRunner() {
 
     const t0 = performance.now()
 
-      try {
-        const response = await fetch(PROXY_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            source_code: code,
-            language_id: langId
-      })
-    });
+    try {
 
       const ms = Math.round(performance.now() - t0)
       setExecTime(ms)
 
-      if (!response.ok) {
-        const text = await response.text()
-        throw new Error(`Error ${response.status}: ${text}`)
-      }
-
-      // CAMBIO 3: la respuesta ya viene decodificada desde la Vercel Function.
-      // No hay que hacer atob() acá.
-      const result = await response.json()
+      const result = await executeCode(langId, code)
 
       const statusId = result.status?.id
       const stdout = result.stdout ?? ""
@@ -131,10 +118,13 @@ export function useCodeRunner() {
       setStatus(statusId === 3 ? "success" : "error")
 
     } catch (err) {
-      const ms = Math.round(performance.now() - t0)
-      setExecTime(ms)
-      const message = err instanceof Error ? err.message : String(err)
-      addLine(`Error: ${message}`, "error")
+      const message = err instanceof Error ? err.message : "Error desconocido"
+      setAlert({
+        title: "Error del sistema",
+        description: message,
+        variant: "destructive"
+      })
+
       setStatus("error")
     }
   }, [])
