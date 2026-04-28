@@ -5,54 +5,79 @@ import { useCodeRunner } from '../hooks/useCodeRunner';
 import { LangTab } from "../components/compiler/LangTab";
 import { EditorPanel } from "..//components/compiler/EditorPanel";
 import { OutputPanel } from "../components/compiler/OutputPanel";
+import { toast } from "sonner"
 
 function buildInitialCodes(): Record<LangKey, string> {
-    return Object.fromEntries(
-        LANG_KEYS.map(key => [key, ""])
-    ) as Record<LangKey, string>
+  return Object.fromEntries(
+    LANG_KEYS.map(key => [key, ""])
+  ) as Record<LangKey, string>
 }
 
 export default function CodeCompiler() {
-    const [ activeLang, setActiveLang ] = useState<LangKey>("javascript")
-    const [ codes, setCodes ] = useState<Record<LangKey, string>>(buildInitialCodes)
-    const { lines, status, execTime, run, clear} = useCodeRunner()
+  const [activeLang, setActiveLang] = useState<LangKey>("javascript")
+  const [codes, setCodes] = useState<Record<LangKey, string>>(buildInitialCodes)
+  const { lines, status, execTime, run, clear, alert } = useCodeRunner()
+  // const { toast } = useToast()
+  const config = LANG_CONFIG[activeLang]
 
-    const config = LANG_CONFIG[activeLang]
+  const handleRun = useCallback(() => {
+    if (status === "running") return
 
-    const handleRun = useCallback(() => {
-        if (status === "running") return
+    run({
+      langId: config.langId,
+      code: codes[activeLang],
+    })
+  }, [status, run, config, codes, activeLang])
 
-        run({
-            langId: config.langId,
-            code: codes[activeLang],
-        })
-    }, [status, run, config, codes, activeLang])
-
-    useEffect(() => {
-        function onKeyDown(e: KeyboardEvent) {
-        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-            e.preventDefault()
-            handleRun()
-        }
-        }
-    
-        window.addEventListener("keydown", onKeyDown)
-
-        return () => window.removeEventListener("keydown", onKeyDown)
-    }, [handleRun])
-
-    function handleLangSwitch(lang: LangKey) {
-        setActiveLang(lang)
-        clear()
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault()
+        handleRun()
+      }
     }
 
-    function handleCodeChange(newCode: string) {
-        setCodes(prev => ({ ...prev, [activeLang]: newCode }))
+    window.addEventListener("keydown", onKeyDown)
+
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [handleRun])
+
+//Alerta sonner, indica errores en el servicio 
+  useEffect(() => {
+    if (!alert) return
+
+    if (alert.variant === "destructive") {
+      toast.error(alert.title, {
+        description: alert.description,
+        action: {
+          label: "Cerrar",
+          onClick: () => console.log("Toast cerrado"),
+        },
+      })
+    } else {
+      toast(alert.title, {
+        description: alert.description,
+        action: {
+          label: "OK",
+          onClick: () => console.log("Confirmado"),
+        },
+      })
     }
 
-    return (
+  }, [alert])
+
+  function handleLangSwitch(lang: LangKey) {
+    setActiveLang(lang)
+    clear()
+  }
+
+  function handleCodeChange(newCode: string) {
+    setCodes(prev => ({ ...prev, [activeLang]: newCode }))
+  }
+
+  return (
     <div className="flex flex-col h-screen bg-background text-foreground font-sans antialiased">
- 
+
       {/* ── Header ── */}
       <header className="flex items-center gap-3 px-5 py-3 border-b border-border bg-muted/20 shrink-0">
         <span className="text-sm font-semibold tracking-widest text-primary/80 uppercase">
@@ -62,7 +87,7 @@ export default function CodeCompiler() {
           Learn By Compiler - compilador multi-lenguaje
         </span>
       </header>
- 
+
       {/* ── Tabs de lenguaje ── */}
       {/*
         Los tabs viven en una barra separada del header.
@@ -80,7 +105,7 @@ export default function CodeCompiler() {
           />
         ))}
       </div>
- 
+
       {/* ── Main: editor + consola ── */}
       {/*
         flex-1 hace que esta sección ocupe todo el espacio restante de la pantalla.
@@ -103,7 +128,7 @@ export default function CodeCompiler() {
           config={config}
         />
       </main>
- 
+
       {/* ── Status bar ── */}
       <footer className="flex items-center gap-4 px-4 py-1.5 border-t border-border bg-muted/20 shrink-0">
         <span className="text-[10px] text-muted-foreground/40 font-sans antialiased">

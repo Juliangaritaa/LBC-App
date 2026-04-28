@@ -129,5 +129,5 @@ export function useCodeRunner() {
     }
   }, [])
 
-  return { lines, status, execTime, run, clear }
+  return { lines, status, execTime, run, clear, alert }
 }
