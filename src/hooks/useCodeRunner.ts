@@ -43,6 +43,16 @@ const STATUS_DESCRIPTIONS: Record<number, string> = {
 
 let lineId = 0
 
+export function validateCode(code: string): string | null {
+  const trimmed = code.trim();
+
+  if (!trimmed) return "Debes escribir código antes de ejecutar.";
+  if (trimmed.length < 3) return "El código es demasiado corto.";
+  if (trimmed.length > 10000) return "El código es demasiado largo.";
+
+  return null;
+}
+
 // ── Hook ─────────────────────────────────────────────────────────────────────
 
 export function useCodeRunner() {
@@ -59,6 +69,7 @@ export function useCodeRunner() {
     setLines([])
     setStatus("idle")
     setExecTime(null)
+    setAlert(null)
   }, [])
 
   const addLine = (text: string, type: LineType) => {
@@ -73,11 +84,10 @@ export function useCodeRunner() {
     const t0 = performance.now()
 
     try {
+      const result = await executeCode(langId, code)
 
       const ms = Math.round(performance.now() - t0)
       setExecTime(ms)
-
-      const result = await executeCode(langId, code)
 
       const statusId = result.status?.id
       const stdout = result.stdout ?? ""

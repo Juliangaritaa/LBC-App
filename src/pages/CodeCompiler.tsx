@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { LANG_CONFIG, LANG_KEYS } from '../lib/lagnConfig';
 import type { LangKey } from "../lib/lagnConfig";
-import { useCodeRunner } from '../hooks/useCodeRunner';
+import { useCodeRunner, validateCode } from '../hooks/useCodeRunner';
 import { LangTab } from "../components/compiler/LangTab";
 import { EditorPanel } from "..//components/compiler/EditorPanel";
 import { OutputPanel } from "../components/compiler/OutputPanel";
@@ -22,6 +22,20 @@ export default function CodeCompiler() {
 
   const handleRun = useCallback(() => {
     if (status === "running") return
+
+    const currentCode = codes[activeLang]
+    const error = validateCode(currentCode)
+
+    if (error) {
+      toast.warning("Validación", {
+        description: error,
+        action: {
+          label: "Cerrar",
+          onClick: () => console.log("Toast cerrado"),
+        },
+      })
+      return
+    }
 
     run({
       langId: config.langId,
@@ -84,7 +98,7 @@ export default function CodeCompiler() {
           LBC
         </span>
         <span className="text-xs text-muted-foreground">
-          Learn By Compiler - compilador multi-lenguaje
+          Learn By Code - compilador multi-lenguaje
         </span>
       </header>
 

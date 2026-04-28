@@ -1,8 +1,6 @@
 export async function executeCode(langId: number, code: string) {
-
-    const URL = import.meta.env.PROXY_URL;
-
-    const response = await fetch(URL, {
+    
+    const response = await fetch("https://ce.judge0.com/submissions?base64_encoded=false&wait=true", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
