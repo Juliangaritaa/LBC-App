@@ -36,7 +36,7 @@ export const JUDGE0_LANG_IDS = {
 // ── Constantes ────────────────────────────────────────────────────────────────
 
 // CAMBIO 1: apunta a tu Vercel Function, no a Judge0 directamente
-const PROXY_URL = "/api/run"
+const PROXY_URL = "https://ce.judge0.com/submissions?base64_encoded=false&wait=true"
 
 // ── Descripciones de status de Judge0 ────────────────────────────────────────
 
@@ -83,21 +83,24 @@ export function useCodeRunner() {
 
     const t0 = performance.now()
 
-    try {
-      // CAMBIO 2: fetch simple a tu proxy, sin headers de RapidAPI ni base64.
-      // La Vercel Function se encarga de todo eso.
-      const response = await fetch(PROXY_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ langId, code }),
+      try {
+        const response = await fetch(PROXY_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            source_code: code,
+            language_id: langId
       })
+    });
 
       const ms = Math.round(performance.now() - t0)
       setExecTime(ms)
 
       if (!response.ok) {
-        const err = await response.json().catch(() => ({}))
-        throw new Error(err.message ?? `Error del servidor: ${response.statusText}`)
+        const text = await response.text()
+        throw new Error(`Error ${response.status}: ${text}`)
       }
 
       // CAMBIO 3: la respuesta ya viene decodificada desde la Vercel Function.

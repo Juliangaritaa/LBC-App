@@ -19,6 +19,7 @@ export default function CodeCompiler() {
 
     const config = LANG_CONFIG[activeLang]
 
+    console.log(config.langId);
     const handleRun = useCallback(() => {
         if (status === "running") return
 
