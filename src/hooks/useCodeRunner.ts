@@ -1,13 +1,5 @@
-// useCodeRunner.ts
-// Hook de ejecución de código usando Judge0 CE vía proxy propio (/api/run).
-// La key de RapidAPI vive solo en el servidor de Vercel — nunca en el browser.
-//
-// Flujo con wait=true: un solo POST a /api/run y recibís el resultado directo.
-// No hay polling — la Vercel Function espera a Judge0 internamente.
-
+import { executeCode } from "../services/judge0.service";
 import { useState, useCallback } from "react"
-
-// ── Tipos ────────────────────────────────────────────────────────────────────
 
 export type LineType = "stdout" | "stderr" | "error" | "info"
 
@@ -32,13 +24,6 @@ export const JUDGE0_LANG_IDS = {
   csharp:     51,
   java:       62,
 } as const
-
-// ── Constantes ────────────────────────────────────────────────────────────────
-
-// CAMBIO 1: apunta a tu Vercel Function, no a Judge0 directamente
-const PROXY_URL = "https://ce.judge0.com/submissions?base64_encoded=false&wait=true"
-
-// ── Descripciones de status de Judge0 ────────────────────────────────────────
 
 const STATUS_DESCRIPTIONS: Record<number, string> = {
   3:  "Accepted",
