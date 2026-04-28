@@ -34,7 +34,7 @@ const LINE_CLASS: Record<OutputLine["type"], string> = {
     info:   "text-muted-foreground italic",
 }
 
-export function OutputPanel({ lines, status, execTime, onClear, config }: OutputPanelProps) {
+export function OutputPanel({ lines, status, execTime, onClear }: OutputPanelProps) {
     const bottomRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {

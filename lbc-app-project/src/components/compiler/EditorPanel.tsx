@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { Play, Loader2, Badge } from "lucide-react";
+import { Play, Loader2 } from "lucide-react";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { cn } from "../../lib/utils";
