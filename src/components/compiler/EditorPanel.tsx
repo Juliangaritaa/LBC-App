@@ -3,111 +3,102 @@ import { Play, Loader2 } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { cn } from "../../lib/utils";
 import type { LangConfig } from "../../lib/lagnConfig";
+import {
+  Card,
+  CardHeader,
+  CardContent
+} from "../ui/card"
+import Editor from "@monaco-editor/react"
 
 interface EditorPanelProps {
-    config: LangConfig
-    code: string
-    onChange: (code: string) => void
-    onRun: () => void
-    running: boolean
+  config: LangConfig
+  code: string
+  onChange: (code: string) => void
+  onRun: () => void
+  running: boolean
 }
 
-export function EditorPanel({ config, code, onChange, onRun, running}: EditorPanelProps) {
-    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+export function EditorPanel({ config, code, onChange, onRun, running }: EditorPanelProps) {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-    function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-        if (e.key === "Tab") {
-            e.preventDefault()
-            const ta = textAreaRef.current!
-            const start = ta.selectionStart
-            const end = ta.selectionEnd
-            const newCode = code.slice(0, start) + " " + code.slice(end)
-            onChange(newCode)
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Tab") {
+      e.preventDefault()
+      const ta = textAreaRef.current!
+      const start = ta.selectionStart
+      const end = ta.selectionEnd
+      const newCode = code.slice(0, start) + " " + code.slice(end)
+      onChange(newCode)
 
-            requestAnimationFrame(() => {
-                ta.selectionStart = ta.selectionEnd = start + 2
-            })
-        }
+      requestAnimationFrame(() => {
+        ta.selectionStart = ta.selectionEnd = start + 2
+      })
     }
+  }
 
-    return (
-    <div className="flex-1 flex flex-col min-w-0 border-r border-border">
-      {/* ── Toolbar del editor ── */}
-      <div className="flex items-center gap-2 px-3 py-2 bg-muted/30 border-b border-border shrink-0">
-        {/* Nombre del archivo con extensión del lenguaje activo */}
-        <span className="text-xs text-muted-foreground font-sans antialiased">
-          main.{config.ext}
-        </span>
- 
-        {/* Badge de versión — usa shadcn Badge con estilos personalizados via style */}
-        <Badge
-          variant="outline"
-          className="text-[10px] font-sans antialiased px-2 py-0"
-          style={{
-            color: config.color,
-            borderColor: `${config.color}55`,
-            backgroundColor: config.colorDim,
-          }}
-        >
-          {config.label}
-        </Badge>
- 
-        <Separator orientation="vertical" className="h-4 mx-1" />
- 
-        {/* Botón de ejecución — shadcn Button con variante outline */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onRun}
-          disabled={running}
-          className={cn(
-            "ml-auto gap-2 text-xs font-sans antialiased h-7 px-3",
-            "transition-all duration-150",
-            // Cuando no está ejecutando, aplicamos color del lenguaje como acento
-            !running && "hover:opacity-80"
-          )}
-          style={
-            !running
-              ? {
-                  color: config.color,
-                  borderColor: `${config.color}55`,
-                  backgroundColor: config.colorDim,
-                }
-              : undefined
-          }
-        >
+  return (
+    <div className="flex-1 min-w-0 p-3">
+      <Card className="h-full flex flex-col">
 
-          {running ? (
-            <Loader2 className="size-3 animate-spin" />
-          ) : (
-            <Play className="size-3" />
-          )}
-          {running ? "Ejecutando..." : "Ejecutar"}
-        </Button>
-      </div>
- 
-      {/* ── Área de código ── */}
- 
-      <textarea
-        ref={textAreaRef}
-        value={code}
-        onChange={e => onChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-        spellCheck={false}
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="off"
-        className={cn(
-          "flex-1 w-full resize-none",
-          "bg-background text-foreground",
-          "font-sans antialiased text-[13px] leading-relaxed",
-          "p-4 outline-none border-none",
-          "caret-primary"
-        )}
-        style={{ tabSize: 2, minHeight: "400px" }}
-      />
+        {/* ── Header (tu toolbar) ── */}
+        <CardHeader className="flex flex-row items-center gap-2 px-3 py-2 border-b">
+
+          <span className="text-xs text-muted-foreground">
+            main.{config.ext}
+          </span>
+
+          <Badge
+            variant="outline"
+            className="text-[10px] px-2 py-0"
+            style={{
+              color: config.color,
+              borderColor: `${config.color}55`,
+              backgroundColor: config.colorDim,
+            }}
+          >
+            {config.label}
+          </Badge>
+
+          <Separator orientation="vertical" className="h-4 mx-1" />
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onRun}
+            disabled={running}
+            className="ml-auto gap-2 text-xs h-7 px-3"
+          >
+            {running ? (
+              <Loader2 className="size-3 animate-spin" />
+            ) : (
+              <Play className="size-3" />
+            )}
+            {running ? "Ejecutando..." : "Ejecutar"}
+          </Button>
+
+        </CardHeader>
+
+        {/* ── Contenido ── */}
+        <CardContent className="flex-1 p-0">
+          <Editor
+            height="100%"
+            language={config.monacoLang} 
+            value={code}
+            onChange={(value) => onChange(value || "")}
+            theme="vs-dark"
+            options={{
+              fontSize: 13,
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
+              tabSize: 2,
+              wordWrap: "on",
+              fontFamily: "monospace",
+            }}
+          />
+        </CardContent>
+      </Card>
     </div>
   )
 }
