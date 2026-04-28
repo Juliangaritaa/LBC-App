@@ -16,7 +16,7 @@ export function LangTab({ config, active, onClick }: LangTabProps) {
                 "inline-flex items-center gap-2 px-3 py-2 text-xs font-medium",
                 "rounded-t-lg border border-transparent border-b-0",
                 "transition-all duration-150 whitespace-nowrap outline-none",
-                "font-mono cursor-pointer",
+                "font-sans antialiased cursor-pointer",
 
                 active
                     ? "bg-background text-foreground border-border -mb-px"

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
-import type { OutputLine, RunStatus } from "../../hooks/usePistonAPI";
+import type { OutputLine, RunStatus } from "../../hooks/useCodeRunner";
 import type { LangConfig } from "../../lib/lagnConfig";
 
 interface OutputPanelProps {
@@ -51,7 +51,7 @@ return (
         {/* Punto de estado animado */}
         <span className={cn("size-2 rounded-full shrink-0 transition-colors duration-300", STATUS_DOT_CLASS[status])} />
  
-        <span className="text-[10px] font-semibold tracking-widest text-muted-foreground uppercase font-mono">
+        <span className="text-[10px] font-semibold tracking-widest text-muted-foreground uppercase font-sans antialiased">
           Consola
         </span>
  
@@ -61,7 +61,7 @@ return (
  
         {/* Tiempo de ejecución — solo se muestra cuando hay un valor */}
         {execTime !== null && (
-          <span className="text-[10px] text-muted-foreground/50 font-mono">
+          <span className="text-[10px] text-muted-foreground/50 font-sans antialiased">
             {execTime}ms
           </span>
         )}
@@ -72,7 +72,7 @@ return (
             variant="ghost"
             size="sm"
             onClick={onClear}
-            className="ml-auto h-6 px-2 text-[10px] text-muted-foreground/60 hover:text-muted-foreground font-mono"
+            className="ml-auto h-6 px-2 text-[10px] text-muted-foreground/60 hover:text-muted-foreground font-sans antialiased"
           >
             limpiar
           </Button>
@@ -86,11 +86,10 @@ return (
         y h-full acá dentro.
       */}
       <ScrollArea className="flex-1">
-        <div className="p-4 font-mono text-[12.5px] leading-relaxed">
+        <div className="p-4 font-sans antialiased text-[12.5px] leading-relaxed">
           {isEmpty ? (
             // Estado vacío: mensaje placeholder
             <div className="flex flex-col items-center justify-center pt-12 gap-2 text-muted-foreground/40">
-              <span className="text-2xl">⬡</span>
               <span className="text-xs italic">Presioná Ejecutar o Ctrl+Enter</span>
             </div>
           ) : (
@@ -110,14 +109,6 @@ return (
           )}
         </div>
       </ScrollArea>
- 
-      {/* ── Footer: info del runtime ── */}
-      <div className="px-3 py-2 border-t border-border bg-muted/20 shrink-0">
-        <p className="text-[10px] text-muted-foreground/40 font-mono">
-          <span style={{ color: `${config.color}99` }}>◈</span>
-          {" "}{config.pistonLang} {config.pistonVersion} — Piston API
-        </p>
-      </div>
     </div>
   )
 }

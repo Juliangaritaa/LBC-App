@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Play, Loader2, Badge } from "lucide-react";
 import { Button } from "../ui/button";
-import { Separator } from "radix-ui";
+import { Separator } from "../ui/separator";
 import { cn } from "../../lib/utils";
 import type { LangConfig } from "../../lib/lagnConfig";
 
@@ -36,21 +36,21 @@ export function EditorPanel({ config, code, onChange, onRun, running}: EditorPan
       {/* ── Toolbar del editor ── */}
       <div className="flex items-center gap-2 px-3 py-2 bg-muted/30 border-b border-border shrink-0">
         {/* Nombre del archivo con extensión del lenguaje activo */}
-        <span className="text-xs text-muted-foreground font-mono">
+        <span className="text-xs text-muted-foreground font-sans antialiased">
           main.{config.ext}
         </span>
  
         {/* Badge de versión — usa shadcn Badge con estilos personalizados via style */}
         <Badge
           variant="outline"
-          className="text-[10px] font-mono px-2 py-0"
+          className="text-[10px] font-sans antialiased px-2 py-0"
           style={{
             color: config.color,
             borderColor: `${config.color}55`,
             backgroundColor: config.colorDim,
           }}
         >
-          {config.label} {config.pistonVersion}
+          {config.label}
         </Badge>
  
         <Separator orientation="vertical" className="h-4 mx-1" />
@@ -62,7 +62,7 @@ export function EditorPanel({ config, code, onChange, onRun, running}: EditorPan
           onClick={onRun}
           disabled={running}
           className={cn(
-            "ml-auto gap-2 text-xs font-mono h-7 px-3",
+            "ml-auto gap-2 text-xs font-sans antialiased h-7 px-3",
             "transition-all duration-150",
             // Cuando no está ejecutando, aplicamos color del lenguaje como acento
             !running && "hover:opacity-80"
@@ -101,7 +101,7 @@ export function EditorPanel({ config, code, onChange, onRun, running}: EditorPan
         className={cn(
           "flex-1 w-full resize-none",
           "bg-background text-foreground",
-          "font-mono text-[13px] leading-relaxed",
+          "font-sans antialiased text-[13px] leading-relaxed",
           "p-4 outline-none border-none",
           "caret-primary"
         )}
