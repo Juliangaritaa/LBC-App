@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Play, Loader2 } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -20,22 +19,6 @@ interface EditorPanelProps {
 }
 
 export function EditorPanel({ config, code, onChange, onRun, running }: EditorPanelProps) {
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === "Tab") {
-      e.preventDefault()
-      const ta = textAreaRef.current!
-      const start = ta.selectionStart
-      const end = ta.selectionEnd
-      const newCode = code.slice(0, start) + " " + code.slice(end)
-      onChange(newCode)
-
-      requestAnimationFrame(() => {
-        ta.selectionStart = ta.selectionEnd = start + 2
-      })
-    }
-  }
 
   return (
     <div className="flex-1 min-w-0 p-3">
@@ -88,7 +71,7 @@ export function EditorPanel({ config, code, onChange, onRun, running }: EditorPa
             onChange={(value) => onChange(value || "")}
             theme="vs-dark"
             options={{
-              fontSize: 13,
+              fontSize: 15,
               minimap: { enabled: false },
               scrollBeyondLastLine: false,
               automaticLayout: true,
