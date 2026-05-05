@@ -1,6 +1,8 @@
 <p align="left">
-  <img src="/lbc_logo.svg" alt="Logo" width="40" style="vertical-align: middle; margin-right: 10px;" />
-  <span style="font-size: 28px; font-weight: bold;">Learn By Code</span>
+  <img src="./public/lbc_logo.svg" alt="Logo" width="40" align="center" />
+  <span style="font-size: 28px; font-weight: bold; margin-left: 10px;">
+    Learn By Code
+  </span>
 </p>
 
 ---
