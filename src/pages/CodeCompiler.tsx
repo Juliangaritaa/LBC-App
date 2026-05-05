@@ -127,25 +127,20 @@ export default function CodeCompiler() {
         cada panel maneja su propio scroll internamente.
       */}
       <main className="flex flex-1 overflow-hidden flex-col md:flex-row">
-        <div className="flex-1 overflow-auto">
-          <EditorPanel
-            config={config}
-            code={codes[activeLang]}
-            onChange={handleCodeChange}
-            onRun={handleRun}
-            running={status === "running"}
-          />
-        </div>
-
-        <div className="flex-1 overflow-auto border-t md:border-t-0 md:border-l">
-          <OutputPanel
-            lines={lines}
-            status={status}
-            execTime={execTime}
-            onClear={clear}
-            config={config}
-          />
-        </div>
+        <EditorPanel
+          config={config}
+          code={codes[activeLang]}
+          onChange={handleCodeChange}
+          onRun={handleRun}
+          running={status === "running"}
+        />
+        <OutputPanel
+          lines={lines}
+          status={status}
+          execTime={execTime}
+          onClear={clear}
+          config={config}
+        />
       </main>
 
       {/* ── Status bar ── */}
