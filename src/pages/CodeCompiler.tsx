@@ -127,14 +127,14 @@ export default function CodeCompiler() {
         cada panel maneja su propio scroll internamente.
       */}
       <main className="flex flex-1 overflow-hidden flex-col md:flex-row">
-        <EditorPanel
+        <EditorPanel className="flex-1"
           config={config}
           code={codes[activeLang]}
           onChange={handleCodeChange}
           onRun={handleRun}
           running={status === "running"}
         />
-        <OutputPanel
+        <OutputPanel className="flex-1"
           lines={lines}
           status={status}
           execTime={execTime}
