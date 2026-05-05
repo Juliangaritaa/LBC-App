@@ -1,75 +1,53 @@
-# React + TypeScript + Vite
+<p align="left">
+  <img src="/lbc_logo.svg" alt="Logo" width="40" style="vertical-align: middle; margin-right: 10px;" />
+  <span style="font-size: 28px; font-weight: bold;">Learn By Code</span>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## Descripción
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Learn By Code** es un compilador web multi-lenguaje que permite escribir y ejecutar código directamente desde el navegador, incluyendo coding desde dispositivos mobiles.
 
-## React Compiler
+Está diseñado para ofrecer una experiencia moderna, rápida y limpia para desarrolladores y estudiantes que quieran probar código sin necesidad de configurar entornos locales.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+---
 
-Note: This will impact Vite dev & build performances.
+## Características
 
-## Expanding the ESLint configuration
+- Editor de código interactivo
+- Ejecución en tiempo real
+- Consola integrada con métricas de ejecución
+- Soporte multi-lenguaje:
+  - JavaScript
+  - TypeScript
+  - Python
+  - Java
+  - C#
+- Interfaz moderna
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tecnologías
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **React**
+- **TypeScript**
+- **ShadCN UI**
+- **TailwindCSS**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Instalación
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# Clonar repositorio
+git clone https://github.com/tu-usuario/learn-by-code.git
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# Entrar al proyecto
+cd learn-by-code
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
+npm run dev
