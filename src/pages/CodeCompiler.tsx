@@ -126,7 +126,7 @@ export default function CodeCompiler() {
         overflow-hidden evita scrolls indeseados en el contenedor padre —
         cada panel maneja su propio scroll internamente.
       */}
-      <main className="flex flex-1 overflow-hidden">
+      <main className="flex flex-1 overflow-hidden flex-col md:flex-row">
         <EditorPanel
           config={config}
           code={codes[activeLang]}
